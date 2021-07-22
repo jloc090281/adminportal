@@ -1,4 +1,4 @@
-import { getWithResponse, post, postWithResponse } from 'utils/requestHelper';
+import { getWithResponse, post } from 'utils/requestHelper';
 import CryptoJS from 'crypto-js';
 
 export async function validateCredentials(serviceURL, user, password) {
@@ -34,7 +34,6 @@ export async function getCompanyEntity(serviceURL, id, token) {
     endpoint =
       serviceURL +
       `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
-    const entityReportList = await getWithResponse(endpoint, token);
     const company = {
       IdEmpresa: entity.IdEmpresa,
       NombreEmpresa: entity.NombreEmpresa,
@@ -67,18 +66,12 @@ export async function getCompanyEntity(serviceURL, id, token) {
       IngresaPagoCliente: entity.IngresaPagoCliente,
       NombreCertificado: '',
       PinCertificado: '',
-      UsuarioHacienda: '',
-      ClaveHacienda: '',
+      LeyendaFactura: entity.IngresaPagoCliente,
+      LeyendaProforma: entity.LeyendaProforma,
+      LeyendaApartado: entity.LeyendaApartado,
+      LeyendaOrdenServicio: entity.LeyendaOrdenServicio,
       MenuPorEmpresa: [],
     };
-    if (entityReportList != null) {
-      entityReportList.foreach(item => {
-        company.MenuPorEmpresa.push({
-          Id: item.Id,
-          Descripcion: item.Descripcion,
-        });
-      });
-    }
     return company;
   } catch (e) {
     throw e.message;
