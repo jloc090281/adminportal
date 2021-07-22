@@ -6,7 +6,7 @@ export async function validateCredentials(serviceURL, user, password) {
     const ecryptedPass = encryptString(password);
     const endpoint =
       serviceURL +
-      '/ValidarCredencialesAdmin?usuario=' +
+      '/validarcredencialesadmin?usuario=' +
       user +
       '&clave=' +
       ecryptedPass;
@@ -29,52 +29,74 @@ export async function getCompanyList(serviceURL, token) {
 
 export async function getCompanyEntity(serviceURL, id, token) {
   try {
-    const endpoint = serviceURL + `//obtenerempresa?idempresa=${id}`;
+    let endpoint = serviceURL + `/obtenerempresa?idempresa=${id}`;
     const entity = await getWithResponse(endpoint, token);
-    return entity;
-  } catch (e) {
-    throw e.message;
-  }
-}
-
-export async function getConfiguration(
-  serviceURL,
-  token,
-  companyId,
-  branchId,
-  terminalId,
-) {
-  try {
-    const data =
-      "{NombreMetodo: 'ObtenerTerminalPorSucursal', Parametros: {IdEmpresa: " +
-      companyId +
-      ', IdSucursal: ' +
-      branchId +
-      ', IdTerminal: ' +
-      terminalId +
-      '}}';
-    const response = await postWithResponse(
-      serviceURL + '/ejecutarconsulta',
-      token,
-      data,
-    );
-    if (response === null) {
-      return [];
+    endpoint =
+      serviceURL +
+      `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
+    const entityReportList = await getWithResponse(endpoint, token);
+    const company = {
+      IdEmpresa: entity.IdEmpresa,
+      NombreEmpresa: entity.NombreEmpresa,
+      NombreComercial: entity.NombreComercial,
+      IdTipoIdentificacion: entity.IdTipoIdentificacion,
+      Identificacion: entity.Identificacion,
+      CodigoActividad: entity.CodigoActividad,
+      Barrio: null,
+      IdProvincia: entity.IdProvincia,
+      IdCanton: entity.IdCanton,
+      IdDistrito: entity.IdDistrito,
+      IdBarrio: entity.IdBarrio,
+      Direccion: entity.Direccion,
+      Telefono1: entity.Telefono1 !== null ? entity.Telefono1 : '',
+      Telefono2: entity.Telefono2 !== null ? entity.Telefono2 : '',
+      CorreoNotificacion: entity.CorreoNotificacion,
+      LineasPorFactura: entity.LineasPorFactura,
+      FechaVence: entity.FechaVence
+        ? entity.FechaVence.DateTime.substr(0, 10)
+        : '',
+      IdTipoMoneda: entity.IdTipoMoneda,
+      TipoContrato: entity.TipoContrato,
+      CantidadDisponible: entity.CantidadDisponible,
+      Contabiliza: entity.Contabiliza,
+      AutoCompletaProducto: entity.AutoCompletaProducto,
+      RecepcionGastos: entity.RecepcionGastos,
+      PermiteFacturar: entity.PermiteFacturar,
+      RegimenSimplificado: entity.RegimenSimplificado,
+      AsignaVendedorPorDefecto: entity.AsignaVendedorPorDefecto,
+      IngresaPagoCliente: entity.IngresaPagoCliente,
+      NombreCertificado: '',
+      PinCertificado: '',
+      UsuarioHacienda: '',
+      ClaveHacienda: '',
+      MenuPorEmpresa: [],
+    };
+    if (entityReportList != null) {
+      entityReportList.foreach(item => {
+        company.MenuPorEmpresa.push({
+          Id: item.Id,
+          Descripcion: item.Descripcion,
+        });
+      });
     }
-    return response;
+    return company;
   } catch (e) {
     throw e.message;
   }
 }
 
-export async function saveConfiguration(serviceURL, token, terminal) {
+export async function saveCompanyEntity(serviceURL, company, token) {
   try {
-    const entidad = JSON.stringify(terminal);
-    const data =
-      "{NombreMetodo: 'ActualizarTerminalPorSucursal', Entidad: " +
-      entidad +
-      '}';
-    await post(serviceURL + '/ejecutar', token, data);
+    const entity = JSON.stringify({
+      Entidad: {
+        ...company,
+        FechaVence:
+          company.FechaVence !== ''
+            ? { DateTime: company.FechaVence + ' 22:59:59 GMT-07:00' }
+            : null,
+      },
+    });
+    await post(serviceURL + '/actualizarempresa', token, entity);
   } catch (e) {
     throw e.message;
   }

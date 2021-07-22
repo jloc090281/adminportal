@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
+import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 
 const Button = ({
   containerStyle,
@@ -17,6 +7,7 @@ const Button = ({
   style,
   titleUpperCase,
   title,
+  icon,
   onPress,
 }) => {
   const containerStyles = {
@@ -31,7 +22,7 @@ const Button = ({
   const backgroundColor = disabled
     ? '#909596'
     : style && style.backgroundColor
-    ? style.borderColor
+    ? style.backgroundColor
     : '#282E2A';
   const elementStyles = {
     ...styles.button,
@@ -48,6 +39,7 @@ const Button = ({
         activeOpacity={0.8}
         onPress={onPress}>
         <Text style={styles.text}>{label}</Text>
+        {icon && <Image source={icon} style={styles.icon} />}
       </TouchableOpacity>
     </View>
   );
@@ -56,19 +48,27 @@ const Button = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 10,
+    paddingBottom: 10,
   },
   button: {
+    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 4,
-    height: 50 * remY,
+    borderRadius: 6,
+    minHeight: 45,
   },
   text: {
     color: 'white',
     fontFamily: 'Cochin',
-    fontSize: 16 * rem,
+    fontSize: 16,
+  },
+  icon: {
+    position: 'absolute',
+    right: 10,
+    width: 30,
+    height: 30,
   },
 });
 

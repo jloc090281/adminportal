@@ -4,13 +4,9 @@ import { bindActionCreators } from 'redux';
 
 import { logIn, setLogInError } from 'store/session/actions';
 
-import { Dimensions, StyleSheet, ScrollView, View, Text } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, BackHandler } from 'react-native';
 import Button from 'components/custom/Button';
 import TextField from 'components/custom/TextField';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
 
 const LoginScreen = ({ error, setLogInError, logIn }) => {
   const [user, setUser] = useState('');
@@ -23,7 +19,7 @@ const LoginScreen = ({ error, setLogInError, logIn }) => {
 
   const buttonEnabled = user !== '' && password !== '';
   return (
-    <View key="2" style={StyleSheet.absoluteFill}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Autenticación</Text>
       </View>
@@ -50,6 +46,11 @@ const LoginScreen = ({ error, setLogInError, logIn }) => {
             containerStyle={styles.button}
             onPress={() => handleOnPress()}
           />
+          <Button
+            title="Salir"
+            titleUpperCase
+            onPress={() => BackHandler.exitApp()}
+          />
           {error !== '' && <Text style={styles.errorText}>{error}</Text>}
         </View>
       </ScrollView>
@@ -58,15 +59,19 @@ const LoginScreen = ({ error, setLogInError, logIn }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%',
+  },
   header: {
-    height: 70 * remY,
+    height: 70,
     backgroundColor: '#08415C',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontFamily: 'Cochin',
-    fontSize: 20 * rem,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
   },

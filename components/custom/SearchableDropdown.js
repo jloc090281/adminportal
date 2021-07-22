@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import SearchableDropdown from 'react-native-searchable-dropdown';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
 
 const Dropdown = ({
   disabled,
@@ -18,7 +14,7 @@ const Dropdown = ({
   const [focus, setFocus] = useState(false);
   const textInputProps = {
     underlineColorAndroid: 'transparent',
-    height: 45 * remY,
+    height: 45,
     style: styles.textInput,
   };
   if (selectedItemId != null) {
@@ -51,11 +47,11 @@ const Dropdown = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   label: {
-    paddingBottom: 10,
-    fontSize: 16 * rem,
+    paddingBottom: 5,
+    fontSize: 16,
   },
   item: {
     padding: 10,
@@ -68,18 +64,19 @@ const styles = StyleSheet.create({
   itemText: {
     color: '#222',
     fontFamily: 'Cochin',
-    fontSize: 16 * rem,
+    fontSize: 16,
   },
   itemsContainer: {
-    maxHeight: 45 * remY * 3 + 4,
+    maxHeight: 196,
   },
   textInput: {
-    padding: 10,
+    padding: 0,
+    paddingLeft: 10,
     borderWidth: 1,
     borderColor: '#CCC',
     borderRadius: 4,
     fontFamily: 'Cochin',
-    fontSize: 16 * rem,
+    fontSize: 16,
   },
   dropdown: {
     padding: 0,

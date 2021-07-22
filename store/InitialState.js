@@ -9,14 +9,10 @@ export const INITIAL_STATE = {
   },
   session: {
     serviceURL: Config.SERVER_URL,
-    authorized: true,
+    authorized: false,
     logInError: '',
-    token: 'vmnh7Is+W5xlr16qcUtu9eGxsFF6JMgETr6cNZhmATFifTfV0uMsbcZdOxgr429T',
-    companyList: [
-      { Id: 1, Descripcion: 'JLC SOLUTIONS CR' },
-      { Id: 2, Descripcion: 'LUBRICENTRO LA COLINA, S.A.' },
-      { Id: 6, Descripcion: 'BARBERIA PILA' },
-    ],
+    token: null,
+    companyList: [],
     company: null,
     user: null,
     roleList: [],

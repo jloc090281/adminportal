@@ -26,7 +26,7 @@ const MainApp = ({ authorized, loaderVisible, error, setModalError }) => {
   const rootComponent = !authorized ? <LoginScreen /> : <HomeScreen />;
   return (
     <View style={styles.container}>
-      <StatusBar hidden={!false} />
+      <StatusBar hidden={false} />
       {rootComponent}
       <Loader visible={loaderVisible} />
       <Modal

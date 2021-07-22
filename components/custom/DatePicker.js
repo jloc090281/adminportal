@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import Button from 'components/custom/Button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const { width } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-
+import iconCalendar from 'assets/date_icon.png';
 const DatePicker = ({ label, value, disabled, onChange }) => {
   const [show, setShow] = useState(false);
 
@@ -24,15 +23,18 @@ const DatePicker = ({ label, value, disabled, onChange }) => {
     currentDate = new Date(parts[2], parts[1] - 1, parts[0]);
   }
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.label}>{label}</Text>
       <Button
+        icon={iconCalendar}
+        style={styles.button}
         disabled={disabled ? disabled : false}
         title={value}
         onPress={() => setShow(true)}
       />
       {show && (
         <DateTimePicker
+          showIcon
           mode="date"
           value={currentDate}
           is24Hour={true}
@@ -45,13 +47,13 @@ const DatePicker = ({ label, value, disabled, onChange }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    paddingBottom: 5,
-  },
   label: {
-    paddingBottom: 10,
-    fontSize: 16 * rem,
+    paddingBottom: 5,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: '#2894f4',
+    borderColor: '#2894f4',
   },
 });
 

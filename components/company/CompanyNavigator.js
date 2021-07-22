@@ -1,22 +1,51 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { setCompany, saveCompany } from 'store/session/actions';
 
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import AnimatedView from 'components/custom/AnimatedView';
 import CompanyScreen from './screens/CompanyScreen';
 
-const CompanyNavigator = () => {
-  const Stack = createStackNavigator();
+const CompanyNavigator = ({ company, setCompany, saveCompany }) => {
+  const Tab = createMaterialTopTabNavigator();
   return (
     <AnimatedView>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={CompanyScreen} />
-        </Stack.Navigator>
+        <Tab.Navigator
+          tabBarOptions={{
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+          }}>
+          <Tab.Screen
+            name="Home"
+            component={CompanyScreen}
+            initialParams={{
+              company,
+              setCompany,
+              saveCompany,
+            }}
+            options={{
+              title: 'General',
+            }}
+          />
+        </Tab.Navigator>
       </NavigationContainer>
     </AnimatedView>
   );
 };
 
-export default CompanyNavigator;
+const mapStateToProps = state => {
+  return {
+    company: state.session.company,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ setCompany, saveCompany }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyNavigator);

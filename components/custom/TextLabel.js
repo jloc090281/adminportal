@@ -1,9 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
+import { StyleSheet, Text, View } from 'react-native';
 
 import { formatCurrency, roundNumber } from 'utils/formatHelper';
 
@@ -25,21 +21,20 @@ const TextLabel = ({ containerStyle, label, value, currencyFormat }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   label: {
-    paddingBottom: 10,
-    fontSize: 16 * rem,
+    paddingBottom: 5,
+    fontSize: 16,
   },
   input: {
     fontFamily: 'Cochin',
-    fontSize: 16 * rem,
+    fontSize: 16,
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,
-    height: 45 * remY,
+    height: 45,
   },
 });
 

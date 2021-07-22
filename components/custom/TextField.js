@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { formatCurrency, roundNumber } from 'utils/formatHelper';
 
@@ -18,14 +14,19 @@ const TextField = ({
   autoCapitalize,
   spellCheck,
   keyboardType,
+  numberOfLines,
   onChangeText,
   onEndEditing,
 }) => {
   const [focus, setFocus] = useState(false);
-
   const containerStyle = {
     ...styles.container,
     ...containerStyle,
+  };
+  const numLines = numberOfLines !== undefined ? numberOfLines : 1;
+  const inputStyle = {
+    ...styles.input,
+    height: 25 * numLines + 20,
   };
   const displayText =
     value.toString() !== ''
@@ -39,10 +40,12 @@ const TextField = ({
     <View style={containerStyle}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
+        multiline={numberOfLines > 1}
+        numberOfLines={numberOfLines}
         editable={editable}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        style={styles.input}
+        style={inputStyle}
         placeholder={placeholder}
         maxLength={maxLength}
         onChangeText={onChangeText}
@@ -60,22 +63,22 @@ const TextField = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    paddingBottom: 5,
+    marginBottom: 10,
   },
   label: {
-    paddingBottom: 10,
-    fontSize: 16 * rem,
+    paddingBottom: 5,
+    fontSize: 16,
   },
   input: {
+    display: 'flex',
+    justifyContent: 'center',
     fontFamily: 'Cochin',
-    fontSize: 16 * rem,
+    fontSize: 16,
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 4,
-    padding: 5,
     paddingLeft: 10,
-    height: 45 * remY,
+    paddingRight: 10,
   },
 });
 

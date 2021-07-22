@@ -1,10 +1,6 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
-const { width, height } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-const remY = height / 683.4285714285714;
 
 const Dropdown = ({ items, label, disabled, selectedValue, onValueChange }) => {
   const pickers = items.map((item, index) => {
@@ -26,15 +22,14 @@ const Dropdown = ({ items, label, disabled, selectedValue, onValueChange }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    paddingBottom: 5,
+    paddingBottom: 10,
   },
   label: {
-    paddingBottom: 10,
-    fontSize: 16 * rem,
+    paddingBottom: 5,
+    fontSize: 16,
   },
   item: {
-    height: 50 * remY,
+    height: 45,
     padding: 10,
   },
 });

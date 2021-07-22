@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-  Image,
-} from 'react-native';
-
-const { width } = Dimensions.get('window');
-const rem = width / 411.42857142857144;
-
-import iconAdd from 'assets/plus-26-white.png';
+import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const IconButton = ({
   disabled,
@@ -46,16 +35,16 @@ const IconButton = ({
         onPress={onPressButton}
         disabled={disabled ? disabled : false}
         style={styles.button}>
-        <Image source={iconButton} style={styles.centerImage} />
+        {iconButton && <Image source={iconButton} style={styles.centerImage} />}
       </TouchableOpacity>
     </View>
   );
 };
 
 IconButton.defaultProps = {
-  size: 30 * rem,
-  iconSize: 25 * rem,
-  iconButton: iconAdd,
+  size: 30,
+  iconSize: 25,
+  iconButton: null,
   primaryColor: 'transparent',
   disabledColor: '#909596',
 };

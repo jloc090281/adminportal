@@ -16,6 +16,7 @@ import {
   validateCredentials,
   getCompanyList,
   getCompanyEntity,
+  saveCompanyEntity,
 } from 'utils/domainHelper';
 
 export const setServiceURL = serviceURL => {
@@ -104,6 +105,21 @@ export function getCompany(id) {
     try {
       const company = await getCompanyEntity(serviceURL, id, token);
       dispatch(setCompany(company));
+      dispatch(stopLoader());
+    } catch (error) {
+      dispatch(stopLoader());
+      dispatch(setModalError(error));
+    }
+  };
+}
+
+export function saveCompany(company) {
+  return async (dispatch, getState) => {
+    const { serviceURL, token } = getState().session;
+    dispatch(startLoader());
+    try {
+      await saveCompanyEntity(serviceURL, company, token);
+      dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());
       dispatch(setModalError(error));

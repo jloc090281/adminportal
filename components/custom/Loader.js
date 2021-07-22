@@ -25,7 +25,7 @@ Loader.propTypes = {
 
 Loader.defaultProps = {
   color: '#FFFFFF',
-  size: 5,
+  size: 8,
   overlayColor: 'rgba(0,0,0,0.5)',
   closeOnTouch: false,
 };
