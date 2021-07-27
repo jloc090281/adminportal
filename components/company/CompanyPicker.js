@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 
 import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 
-import SearchableDropdown from 'components/custom/SearchableDropdown';
-import Button from 'components/custom/Button';
+import { SearchableDropdown, Button } from 'components/custom';
 
 const CompanyPicker = ({ companyList, getCompany, logOut }) => {
   const [company, setCompany] = useState(null);
-  let companies = companyList.map(item => {
+  const companies = companyList.map(item => {
     return { id: item.Id, name: item.Descripcion };
   });
   return (

@@ -27,6 +27,16 @@ export async function getCompanyList(serviceURL, token) {
   }
 }
 
+export async function getReportList(serviceURL, token) {
+  try {
+    const endpoint = serviceURL + '/obtenerlistadocatalogoreportes';
+    const list = await getWithResponse(endpoint, token);
+    return list;
+  } catch (e) {
+    throw e.message;
+  }
+}
+
 export async function getCompanyEntity(serviceURL, id, token) {
   try {
     let endpoint = serviceURL + `/obtenerempresa?idempresa=${id}`;
@@ -34,51 +44,31 @@ export async function getCompanyEntity(serviceURL, id, token) {
     endpoint =
       serviceURL +
       `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
+    const menuList = await getWithResponse(endpoint, token);
     const company = {
-      IdEmpresa: entity.IdEmpresa,
-      NombreEmpresa: entity.NombreEmpresa,
-      NombreComercial: entity.NombreComercial,
-      IdTipoIdentificacion: entity.IdTipoIdentificacion,
-      Identificacion: entity.Identificacion,
-      CodigoActividad: entity.CodigoActividad,
+      ...entity,
       Barrio: null,
-      IdProvincia: entity.IdProvincia,
-      IdCanton: entity.IdCanton,
-      IdDistrito: entity.IdDistrito,
-      IdBarrio: entity.IdBarrio,
-      Direccion: entity.Direccion,
       Telefono1: entity.Telefono1 !== null ? entity.Telefono1 : '',
       Telefono2: entity.Telefono2 !== null ? entity.Telefono2 : '',
-      CorreoNotificacion: entity.CorreoNotificacion,
-      LineasPorFactura: entity.LineasPorFactura,
       FechaVence: entity.FechaVence
         ? entity.FechaVence.DateTime.substr(0, 10)
         : '',
-      IdTipoMoneda: entity.IdTipoMoneda,
-      TipoContrato: entity.TipoContrato,
-      CantidadDisponible: entity.CantidadDisponible,
-      Contabiliza: entity.Contabiliza,
-      AutoCompletaProducto: entity.AutoCompletaProducto,
-      RecepcionGastos: entity.RecepcionGastos,
-      PermiteFacturar: entity.PermiteFacturar,
-      RegimenSimplificado: entity.RegimenSimplificado,
-      AsignaVendedorPorDefecto: entity.AsignaVendedorPorDefecto,
-      IngresaPagoCliente: entity.IngresaPagoCliente,
       NombreCertificado: '',
       PinCertificado: '',
-      LeyendaFactura: entity.IngresaPagoCliente,
-      LeyendaProforma: entity.LeyendaProforma,
-      LeyendaApartado: entity.LeyendaApartado,
-      LeyendaOrdenServicio: entity.LeyendaOrdenServicio,
-      MenuPorEmpresa: [],
     };
-    return company;
+    return { company, menuList: menuList || [] };
   } catch (e) {
     throw e.message;
   }
 }
 
-export async function saveCompanyEntity(serviceURL, company, token) {
+export async function saveCompanyEntity(
+  serviceURL,
+  company,
+  companyReports,
+  reportsUpdated,
+  token,
+) {
   try {
     const entity = JSON.stringify({
       Entidad: {
@@ -90,6 +80,16 @@ export async function saveCompanyEntity(serviceURL, company, token) {
       },
     });
     await post(serviceURL + '/actualizarempresa', token, entity);
+    if (reportsUpdated) {
+      const reports = JSON.stringify({
+        Id: company.IdEmpresa,
+        Datos: companyReports.map(item => ({
+          IdEmpresa: company.IdEmpresa,
+          IdReporte: item.Id,
+        })),
+      });
+      await post(serviceURL + '/actualizarlistadoreportes', token, reports);
+    }
   } catch (e) {
     throw e.message;
   }

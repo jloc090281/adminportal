@@ -1,5 +1,6 @@
 export { default as AnimatedView } from './AnimatedView';
 export { default as Button } from './Button';
+export { default as CircleButton } from './CircleButton';
 export { default as CheckBox } from './CheckBox';
 export { default as DatePicker } from './DatePicker';
 export { default as Dropdown } from './Dropdown';
