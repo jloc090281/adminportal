@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setReportList } from 'store/session/actions';
+import { setRoleList } from 'store/session/actions';
 
 import { ScrollView, View, StyleSheet, Text } from 'react-native';
 
@@ -23,34 +23,34 @@ const Item = ({ item, onPress }) => (
   </View>
 );
 
-const ReportListScreen = ({ reportList, companyReports, setReportList }) => {
-  console.log('companyReports', companyReports);
+const RoleListScreen = ({ roleList, companyRoles, setRoleList }) => {
+  console.log('companyRoles', companyRoles);
   const removeItem = id => {
-    setReportList(
-      companyReports.filter(item => item.Id !== id),
+    setRoleList(
+      companyRoles.filter(item => item.Id !== id),
       true,
     );
   };
 
   const addItem = item => {
-    const selected = reportList.find(companyItem => companyItem.Id === item.id);
-    if (!companyReports.find(elm => elm.Id === item.id)) {
-      setReportList([...companyReports, selected], true);
+    const selected = roleList.find(companyItem => companyItem.Id === item.id);
+    if (!companyRoles.find(elm => elm.Id === item.id)) {
+      setRoleList([...companyRoles, selected], true);
     }
   };
 
-  const availableReportList = reportList.map(item => {
+  const availableRoleList = roleList.map(item => {
     return { id: item.Id, name: item.Descripcion };
   });
 
-  const items = companyReports.map(item => (
+  const items = companyRoles.map(item => (
     <Item key={item.Id} item={item} onPress={removeItem} />
   ));
   return (
     <View style={styles.container}>
       <SearchableDropdown
-        label="Seleccione un reporte"
-        items={availableReportList}
+        label="Seleccione un permiso"
+        items={availableRoleList}
         onItemSelect={item => addItem(item)}
       />
       <ScrollView>{items}</ScrollView>
@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    reportList: state.session.reportList,
-    companyReports: state.session.companyReports,
+    roleList: state.session.roleList,
+    companyRoles: state.session.companyRoles,
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ setReportList }, dispatch);
+  return bindActionCreators({ setRoleList }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RoleListScreen);

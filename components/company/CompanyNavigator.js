@@ -6,6 +6,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import AnimatedView from 'components/custom/AnimatedView';
 import CompanyScreen from './screens/CompanyScreen';
 import ReportListScreen from './screens/ReportListScreen';
+import RoleListScreen from './screens/RoleListScreen';
 
 const CompanyNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
@@ -25,10 +26,17 @@ const CompanyNavigator = () => {
             }}
           />
           <Tab.Screen
-            name="MenuList"
+            name="ReportList"
             component={ReportListScreen}
             options={{
-              title: 'Listado menús',
+              title: 'Reportes',
+            }}
+          />
+          <Tab.Screen
+            name="RoleList"
+            component={RoleListScreen}
+            options={{
+              title: 'Roles',
             }}
           />
         </Tab.Navigator>

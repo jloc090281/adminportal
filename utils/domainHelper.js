@@ -37,6 +37,16 @@ export async function getReportList(serviceURL, token) {
   }
 }
 
+export async function getRoleList(serviceURL, token) {
+  try {
+    const endpoint = serviceURL + '/obtenerlistadoroles';
+    const list = await getWithResponse(endpoint, token);
+    return list;
+  } catch (e) {
+    throw e.message;
+  }
+}
+
 export async function getCompanyEntity(serviceURL, id, token) {
   try {
     let endpoint = serviceURL + `/obtenerempresa?idempresa=${id}`;
@@ -44,7 +54,11 @@ export async function getCompanyEntity(serviceURL, id, token) {
     endpoint =
       serviceURL +
       `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
-    const menuList = await getWithResponse(endpoint, token);
+    const reportList = await getWithResponse(endpoint, token);
+    endpoint =
+      serviceURL +
+      `/obtenerlistadoroleporempresa?idempresa=${entity.IdEmpresa}`;
+    const roleList = await getWithResponse(endpoint, token);
     const company = {
       ...entity,
       Barrio: null,
@@ -56,7 +70,7 @@ export async function getCompanyEntity(serviceURL, id, token) {
       NombreCertificado: '',
       PinCertificado: '',
     };
-    return { company, menuList: menuList || [] };
+    return { company, reportList: reportList || [], roleList: roleList || [] };
   } catch (e) {
     throw e.message;
   }
@@ -67,6 +81,8 @@ export async function saveCompanyEntity(
   company,
   companyReports,
   reportsUpdated,
+  companyRoles,
+  rolesUpdated,
   token,
 ) {
   try {
@@ -89,6 +105,16 @@ export async function saveCompanyEntity(
         })),
       });
       await post(serviceURL + '/actualizarlistadoreportes', token, reports);
+    }
+    if (rolesUpdated) {
+      const roles = JSON.stringify({
+        Id: company.IdEmpresa,
+        Datos: companyRoles.map(item => ({
+          IdEmpresa: company.IdEmpresa,
+          IdRole: item.Id,
+        })),
+      });
+      await post(serviceURL + '/actualizarlistadoroles', token, roles);
     }
   } catch (e) {
     throw e.message;

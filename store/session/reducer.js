@@ -2,12 +2,13 @@ import {
   SET_SERVICE_URL,
   SET_COMPANY_LIST,
   SET_AVAILABLE_REPORT_LIST,
+  SET_AVAILABLE_ROLE_LIST,
   SET_AUTHORIZED,
   SET_UNAUTHORIZED,
   SET_LOGIN_ERROR,
   SET_COMPANY,
   SET_USER,
-  SET_MENU_LIST,
+  SET_REPORT_LIST,
   SET_ROLE_LIST,
 } from './types';
 
@@ -19,6 +20,8 @@ const sessionReducer = (state = {}, { type, payload }) => {
       return { ...state, companyList: payload.list };
     case SET_AVAILABLE_REPORT_LIST:
       return { ...state, reportList: payload.list };
+    case SET_AVAILABLE_ROLE_LIST:
+      return { ...state, roleList: payload.list };
     case SET_AUTHORIZED:
       return {
         ...state,
@@ -33,7 +36,7 @@ const sessionReducer = (state = {}, { type, payload }) => {
       return { ...state, company: payload.company };
     case SET_USER:
       return { ...state, user: payload.user };
-    case SET_MENU_LIST:
+    case SET_REPORT_LIST:
       return {
         ...state,
         companyReports: payload.list,
