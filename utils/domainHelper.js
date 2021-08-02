@@ -67,8 +67,6 @@ export async function getCompanyEntity(serviceURL, id, token) {
       FechaVence: entity.FechaVence
         ? entity.FechaVence.DateTime.substr(0, 10)
         : '',
-      NombreCertificado: '',
-      PinCertificado: '',
     };
     return { company, reportList: reportList || [], roleList: roleList || [] };
   } catch (e) {
