@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface FacturaAdminTests : XCTestCase
+@interface facturaadminTests : XCTestCase
 
 @end
 
-@implementation FacturaAdminTests
+@implementation facturaadminTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
