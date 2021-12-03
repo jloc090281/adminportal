@@ -92,7 +92,7 @@ export async function saveCompanyEntity(serviceURL, company, token) {
         ...company,
         FechaVence:
           company.FechaVence !== ''
-            ? { DateTime: company.FechaVence + ' 22:59:59 GMT-07:00' }
+            ? { DateTime: company.FechaVence + ' 23:59:59 GMT-06:00' }
             : null,
       },
     });
