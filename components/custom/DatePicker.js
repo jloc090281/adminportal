@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from 'components/custom/Button';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { convertToDateString } from 'utils/formatHelper';
 
 import iconCalendar from 'assets/date_icon.png';
 const DatePicker = ({ label, value, disabled, onChange }) => {
@@ -10,17 +11,16 @@ const DatePicker = ({ label, value, disabled, onChange }) => {
   const handleOnChange = (event, date) => {
     setShow(false);
     if (event.type !== 'dismissed') {
-      const dayFormatted = (date.getDate() < 10 ? '0' : '') + date.getDate();
-      const monthFormatted =
-        (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1);
-      const dateText = `${dayFormatted}/${monthFormatted}/${date.getFullYear()}`;
-      onChange(dateText);
+      onChange(date);
     }
   };
   let currentDate = new Date();
   if (value !== '') {
-    const parts = value.split('/');
-    currentDate = new Date(parts[2], parts[1] - 1, parts[0]);
+    if (typeof(value) === 'string') {
+      currentDate = new Date(value);
+    } else {
+      currentDate = value;
+    }
   }
   return (
     <View>
@@ -29,7 +29,7 @@ const DatePicker = ({ label, value, disabled, onChange }) => {
         icon={iconCalendar}
         style={styles.button}
         disabled={disabled ? disabled : false}
-        title={value}
+        title={convertToDateString(value)}
         onPress={() => setShow(true)}
       />
       {show && (

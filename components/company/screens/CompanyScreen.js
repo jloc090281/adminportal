@@ -60,13 +60,6 @@ const CompanyScreen = ({ route }) => {
           }
         />
         <TextField
-          label="Codigo actividad económica"
-          value={localCompany.CodigoActividad}
-          onChangeText={value =>
-            setLocalCompany({ ...localCompany, CodigoActividad: value })
-          }
-        />
-        <TextField
           label="Cantidad doc. disponible"
           value={localCompany.CantidadDisponible}
           onChangeText={value =>

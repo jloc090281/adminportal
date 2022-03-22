@@ -24,3 +24,17 @@ export function formatCurrency(number, decPlaces, decSep, thouSep) {
 export function roundNumber(number, places) {
   return +(Math.round(number + 'e+' + places) + 'e-' + places);
 }
+
+export function convertToDateString(date) {
+  if (typeof date === "string") date = new Date(date)
+  const dayFormatted = (date.getDate() < 10 ? '0' : '') + date.getDate()
+  const monthFormatted = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
+  return `${dayFormatted}/${monthFormatted}/${date.getFullYear()}`
+}
+
+export function convertToDateTimeString(date) {
+  if (typeof date === "string") date = new Date(date)
+  const dayFormatted = (date.getDate() < 10 ? '0' : '') + date.getDate()
+  const monthFormatted = (date.getMonth() + 1 < 10 ? '0' : '') + (date.getMonth() + 1)
+  return `${date.getFullYear()}-${monthFormatted}-${dayFormatted}T23:59:59`
+}

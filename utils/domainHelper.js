@@ -1,5 +1,6 @@
 import { getWithResponse, post, postWithResponse } from 'utils/requestHelper';
 import CryptoJS from 'crypto-js';
+import { convertToDateTimeString } from 'utils/formatHelper';
 
 export async function validateCredentials(serviceURL, user, password) {
   try {
@@ -35,49 +36,22 @@ export async function getCompanyEntity(serviceURL, id, token) {
       serviceURL +
       `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
     const entityReportList = await getWithResponse(endpoint, token);
+    console.log('entity', entity);
     const company = {
-      IdEmpresa: entity.IdEmpresa,
-      NombreEmpresa: entity.NombreEmpresa,
-      NombreComercial: entity.NombreComercial,
-      IdTipoIdentificacion: entity.IdTipoIdentificacion,
-      Identificacion: entity.Identificacion,
-      CodigoActividad: entity.CodigoActividad,
+      ...entity,
       Barrio: null,
-      IdProvincia: entity.IdProvincia,
-      IdCanton: entity.IdCanton,
-      IdDistrito: entity.IdDistrito,
-      IdBarrio: entity.IdBarrio,
-      Direccion: entity.Direccion,
-      Telefono1: entity.Telefono1 !== null ? entity.Telefono1 : '',
-      Telefono2: entity.Telefono2 !== null ? entity.Telefono2 : '',
-      CorreoNotificacion: entity.CorreoNotificacion,
-      LineasPorFactura: entity.LineasPorFactura,
+      Logotipo: null,
       FechaVence: entity.FechaVence
-        ? entity.FechaVence.DateTime.substr(0, 10)
+        ? entity.FechaVence
         : '',
-      IdTipoMoneda: entity.IdTipoMoneda,
-      TipoContrato: entity.TipoContrato,
-      CantidadDisponible: entity.CantidadDisponible,
-      Contabiliza: entity.Contabiliza,
-      AutoCompletaProducto: entity.AutoCompletaProducto,
-      RecepcionGastos: entity.RecepcionGastos,
-      PermiteFacturar: entity.PermiteFacturar,
-      RegimenSimplificado: entity.RegimenSimplificado,
-      AsignaVendedorPorDefecto: entity.AsignaVendedorPorDefecto,
-      IngresaPagoCliente: entity.IngresaPagoCliente,
-      NombreCertificado: '',
-      PinCertificado: '',
-      UsuarioHacienda: '',
-      ClaveHacienda: '',
-      MenuPorEmpresa: [],
+      ReportePorEmpresa: [],
     };
+    console.log('company', company);
     if (entityReportList != null) {
-      entityReportList.foreach(item => {
-        company.MenuPorEmpresa.push({
-          Id: item.Id,
-          Descripcion: item.Descripcion,
-        });
-      });
+      company.ReportePorEmpresa = entityReportList.map(item => ({
+        Id: item.Id,
+        Descripcion: item.Descripcion,
+      }));
     }
     return company;
   } catch (e) {
@@ -92,10 +66,11 @@ export async function saveCompanyEntity(serviceURL, company, token) {
         ...company,
         FechaVence:
           company.FechaVence !== ''
-            ? { DateTime: company.FechaVence + ' 23:59:59 GMT-06:00' }
+            ? convertToDateTimeString(company.FechaVence)
             : null,
       },
     });
+    console.log('entity', entity);
     await post(serviceURL + '/actualizarempresa', token, entity);
   } catch (e) {
     throw e.message;
