@@ -24,7 +24,6 @@ const Item = ({ item, onPress }) => (
 );
 
 const ReportListScreen = ({ reportList, companyReports, setReportList }) => {
-  console.log('companyReports', companyReports);
   const removeItem = id => {
     setReportList(
       companyReports.filter(item => item.Id !== id),

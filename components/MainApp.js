@@ -19,9 +19,9 @@ import {
   ModalTitle,
 } from 'react-native-modals';
 
-import { setModalError } from 'store/ui/actions';
+import { setModalError } from '@store/ui/actions';
 
-import Loader from 'components/custom/Loader';
+import Loader from './custom/Loader';
 
 const { width } = Dimensions.get('window');
 const rem = width / 411.42857142857144;

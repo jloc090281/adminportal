@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { getCompany, logOut } from 'store/session/actions';
 
-import CompanyNavigator from 'components/company/CompanyNavigator';
+import CompanyScreen from 'components/company/screens/CompanyScreen';
 import CompanyPicker from 'components/company/CompanyPicker';
 
 const HomeScreen = ({ companyList, company, getCompany, logOut }) => {
@@ -16,7 +16,7 @@ const HomeScreen = ({ companyList, company, getCompany, logOut }) => {
         logOut={logOut}
       />
     ) : (
-      <CompanyNavigator company={company} />
+      <CompanyScreen company={company} />
     );
   return rootComponent;
 };

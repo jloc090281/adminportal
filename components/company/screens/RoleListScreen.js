@@ -24,7 +24,6 @@ const Item = ({ item, onPress }) => (
 );
 
 const RoleListScreen = ({ roleList, companyRoles, setRoleList }) => {
-  console.log('companyRoles', companyRoles);
   const removeItem = id => {
     setRoleList(
       companyRoles.filter(item => item.Id !== id),

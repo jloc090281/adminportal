@@ -12,14 +12,14 @@ const CompanyPicker = ({ companyList, getCompany, logOut }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('assets/logo.png')} style={styles.logo} />
+        <Image source={require('@assets/logo.png')} style={styles.logo} />
         <View style={styles.title}>
           <Text style={styles.titleText}>JLC Solutions CR</Text>
         </View>
         <View style={styles.logout}>
           <TouchableOpacity activeOpacity={0.5} onPress={() => logOut()}>
             <Image
-              source={require('assets/account-lock.png')}
+              source={require('@assets/account-lock.png')}
               style={styles.logoutImage}
             />
           </TouchableOpacity>

@@ -79,6 +79,7 @@ export async function post(endpointURL, token, datos) {
       let error = '';
       try {
         error = await response.json();
+        console.log('response error', error);
       } catch {
         error =
           'Error al comunicarse con el servicio de factura electrónica. Por favor verifique su conexión de datos.';

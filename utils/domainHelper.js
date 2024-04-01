@@ -65,9 +65,14 @@ export async function getCompanyEntity(serviceURL, id, token) {
       Telefono1: entity.Telefono1 !== null ? entity.Telefono1 : '',
       Telefono2: entity.Telefono2 !== null ? entity.Telefono2 : '',
       FechaVence: entity.FechaVence
-        ? entity.FechaVence.DateTime.substr(0, 10)
+        ? entity.FechaVence.substr(8, 2) +
+          '/' +
+          entity.FechaVence.substr(5, 2) +
+          '/' +
+          entity.FechaVence.substr(0, 4)
         : '',
     };
+
     return { company, reportList: reportList || [], roleList: roleList || [] };
   } catch (e) {
     throw e.message;
@@ -89,7 +94,12 @@ export async function saveCompanyEntity(
         ...company,
         FechaVence:
           company.FechaVence !== ''
-            ? { DateTime: company.FechaVence + ' 22:59:59 GMT-07:00' }
+            ? company.FechaVence.substr(6, 4) +
+              '-' +
+              company.FechaVence.substr(3, 2) +
+              '-' +
+              company.FechaVence.substr(0, 2) +
+              'T23:59:59'
             : null,
       },
     });
