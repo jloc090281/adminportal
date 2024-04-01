@@ -2,7 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { Dimensions, StyleSheet, StatusBar, View, Text } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  StatusBar,
+  SafeAreaView,
+  View,
+  Text,
+} from 'react-native';
 import {
   Modal,
   ModalContent,
@@ -12,9 +19,9 @@ import {
   ModalTitle,
 } from 'react-native-modals';
 
-import { setModalError } from 'store/ui/actions';
+import { setModalError } from '@store/ui/actions';
 
-import Loader from 'components/custom/Loader';
+import Loader from './custom/Loader';
 
 const { width } = Dimensions.get('window');
 const rem = width / 411.42857142857144;
@@ -25,7 +32,7 @@ import HomeScreen from './home/HomeScreen';
 const MainApp = ({ authorized, loaderVisible, error, setModalError }) => {
   const rootComponent = !authorized ? <LoginScreen /> : <HomeScreen />;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar hidden={false} />
       {rootComponent}
       <Loader visible={loaderVisible} />
@@ -52,7 +59,7 @@ const MainApp = ({ authorized, loaderVisible, error, setModalError }) => {
           </View>
         </ModalContent>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

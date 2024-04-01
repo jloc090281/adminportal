@@ -1,13 +1,15 @@
 import {
   SET_SERVICE_URL,
   SET_COMPANY_LIST,
+  SET_AVAILABLE_REPORT_LIST,
+  SET_AVAILABLE_ROLE_LIST,
   SET_AUTHORIZED,
   SET_UNAUTHORIZED,
   SET_LOGIN_ERROR,
   SET_COMPANY,
   SET_USER,
+  SET_REPORT_LIST,
   SET_ROLE_LIST,
-  SET_MENU_LIST,
 } from './types';
 
 import { startLoader, stopLoader, setModalError } from 'store/ui/actions';
@@ -15,6 +17,8 @@ import { startLoader, stopLoader, setModalError } from 'store/ui/actions';
 import {
   validateCredentials,
   getCompanyList,
+  getReportList,
+  getRoleList,
   getCompanyEntity,
   saveCompanyEntity,
 } from 'utils/domainHelper';
@@ -46,10 +50,24 @@ export const setLogInError = error => {
   };
 };
 
-export const setCompanyList = companyList => {
+export const setCompanyList = list => {
   return {
     type: SET_COMPANY_LIST,
-    payload: { companyList },
+    payload: { list },
+  };
+};
+
+export const setAvailableReportList = list => {
+  return {
+    type: SET_AVAILABLE_REPORT_LIST,
+    payload: { list },
+  };
+};
+
+export const setAvailableRoleList = list => {
+  return {
+    type: SET_AVAILABLE_ROLE_LIST,
+    payload: { list },
   };
 };
 
@@ -67,17 +85,17 @@ export const setUser = user => {
   };
 };
 
-export const setRoleList = list => {
+export const setReportList = (list, updated) => {
   return {
-    type: SET_ROLE_LIST,
-    payload: { list },
+    type: SET_REPORT_LIST,
+    payload: { list, updated },
   };
 };
 
-export const setMenuList = list => {
+export const setRoleList = (list, updated) => {
   return {
-    type: SET_MENU_LIST,
-    payload: { list },
+    type: SET_ROLE_LIST,
+    payload: { list, updated },
   };
 };
 
@@ -88,8 +106,12 @@ export function logIn(user, password) {
     try {
       const adminUser = await validateCredentials(serviceURL, user, password);
       const companyList = await getCompanyList(serviceURL, adminUser.Token);
+      const reportList = await getReportList(serviceURL, adminUser.Token);
+      const roleList = await getRoleList(serviceURL, adminUser.Token);
       dispatch(setAuthorized(adminUser.Token, true));
       dispatch(setCompanyList(companyList));
+      dispatch(setAvailableReportList(reportList));
+      dispatch(setAvailableRoleList(roleList));
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());
@@ -103,8 +125,14 @@ export function getCompany(id) {
     const { serviceURL, token } = getState().session;
     dispatch(startLoader());
     try {
-      const company = await getCompanyEntity(serviceURL, id, token);
+      const { company, reportList, roleList } = await getCompanyEntity(
+        serviceURL,
+        id,
+        token,
+      );
       dispatch(setCompany(company));
+      dispatch(setReportList(reportList, false));
+      dispatch(setRoleList(roleList, false));
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());
@@ -113,13 +141,30 @@ export function getCompany(id) {
   };
 }
 
-export function saveCompany(company) {
+export function saveCompany() {
   return async (dispatch, getState) => {
-    const { serviceURL, token } = getState().session;
+    const {
+      serviceURL,
+      token,
+      company,
+      companyReports,
+      reportsUpdated,
+      companyRoles,
+      rolesUpdated,
+    } = getState().session;
     dispatch(startLoader());
     try {
-      await saveCompanyEntity(serviceURL, company, token);
+      await saveCompanyEntity(
+        serviceURL,
+        company,
+        companyReports,
+        reportsUpdated,
+        companyRoles,
+        rolesUpdated,
+        token,
+      );
       dispatch(stopLoader());
+      dispatch(setModalError('Transacción completada satisfactoriamente. . .'));
     } catch (error) {
       dispatch(stopLoader());
       dispatch(setModalError(error));

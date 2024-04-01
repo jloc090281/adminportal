@@ -2,25 +2,24 @@ import React, { useState } from 'react';
 
 import { StyleSheet, View, TouchableOpacity, Image, Text } from 'react-native';
 
-import SearchableDropdown from 'components/custom/SearchableDropdown';
-import Button from 'components/custom/Button';
+import { SearchableDropdown, Button } from 'components/custom';
 
 const CompanyPicker = ({ companyList, getCompany, logOut }) => {
   const [company, setCompany] = useState(null);
-  let companies = companyList.map(item => {
+  const companies = companyList.map(item => {
     return { id: item.Id, name: item.Descripcion };
   });
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image source={require('assets/logo.png')} style={styles.logo} />
+        <Image source={require('@assets/logo.png')} style={styles.logo} />
         <View style={styles.title}>
           <Text style={styles.titleText}>JLC Solutions CR</Text>
         </View>
         <View style={styles.logout}>
           <TouchableOpacity activeOpacity={0.5} onPress={() => logOut()}>
             <Image
-              source={require('assets/account-lock.png')}
+              source={require('@assets/account-lock.png')}
               style={styles.logoutImage}
             />
           </TouchableOpacity>

@@ -24,11 +24,16 @@ const Button = ({
     : style && style.backgroundColor
     ? style.backgroundColor
     : '#282E2A';
+  const textcolor = style && style.textColor ? style.textColor : 'white';
   const elementStyles = {
     ...styles.button,
     ...style,
     borderColor,
     backgroundColor,
+  };
+  const textStyles = {
+    ...styles.text,
+    color: textcolor,
   };
   const label = titleUpperCase ? title.toUpperCase() : title;
   return (
@@ -38,7 +43,7 @@ const Button = ({
         disabled={disabled ? disabled : false}
         activeOpacity={0.8}
         onPress={onPress}>
-        <Text style={styles.text}>{label}</Text>
+        <Text style={textStyles}>{label}</Text>
         {icon && <Image source={icon} style={styles.icon} />}
       </TouchableOpacity>
     </View>
@@ -60,7 +65,6 @@ const styles = StyleSheet.create({
     minHeight: 45,
   },
   text: {
-    color: 'white',
     fontFamily: 'Cochin',
     fontSize: 16,
   },

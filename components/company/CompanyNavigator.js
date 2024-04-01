@@ -1,16 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-import { setCompany, saveCompany } from 'store/session/actions';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import AnimatedView from 'components/custom/AnimatedView';
 import CompanyScreen from './screens/CompanyScreen';
+import ReportListScreen from './screens/ReportListScreen';
+import RoleListScreen from './screens/RoleListScreen';
 
-const CompanyNavigator = ({ company, setCompany, saveCompany }) => {
+const CompanyNavigator = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
     <AnimatedView>
@@ -23,13 +21,22 @@ const CompanyNavigator = ({ company, setCompany, saveCompany }) => {
           <Tab.Screen
             name="Home"
             component={CompanyScreen}
-            initialParams={{
-              company,
-              setCompany,
-              saveCompany,
-            }}
             options={{
               title: 'General',
+            }}
+          />
+          <Tab.Screen
+            name="ReportList"
+            component={ReportListScreen}
+            options={{
+              title: 'Reportes',
+            }}
+          />
+          <Tab.Screen
+            name="RoleList"
+            component={RoleListScreen}
+            options={{
+              title: 'Roles',
             }}
           />
         </Tab.Navigator>
@@ -38,14 +45,4 @@ const CompanyNavigator = ({ company, setCompany, saveCompany }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    company: state.session.company,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ setCompany, saveCompany }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyNavigator);
+export default CompanyNavigator;

@@ -1,7 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Bars } from 'react-native-loader';
+import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
@@ -9,23 +7,15 @@ const Loader = ({ overlayColor, size, color, visible }) => {
   return visible ? (
     <View style={[styles.modalWrapper, { backgroundColor: overlayColor }]}>
       <View>
-        <Bars size={size} color={color} />
+        <ActivityIndicator size={size} color={color} />
       </View>
     </View>
   ) : null;
 };
 
-Loader.propTypes = {
-  closeOnTouch: PropTypes.bool,
-  color: PropTypes.string,
-  size: PropTypes.number,
-  overlayColor: PropTypes.string,
-  visible: PropTypes.bool,
-};
-
 Loader.defaultProps = {
   color: '#FFFFFF',
-  size: 8,
+  size: 'large',
   overlayColor: 'rgba(0,0,0,0.5)',
   closeOnTouch: false,
 };

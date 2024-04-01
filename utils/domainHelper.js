@@ -1,4 +1,4 @@
-import { getWithResponse, post, postWithResponse } from 'utils/requestHelper';
+import { getWithResponse, post } from 'utils/requestHelper';
 import CryptoJS from 'crypto-js';
 import { convertToDateTimeString } from 'utils/formatHelper';
 
@@ -28,6 +28,26 @@ export async function getCompanyList(serviceURL, token) {
   }
 }
 
+export async function getReportList(serviceURL, token) {
+  try {
+    const endpoint = serviceURL + '/obtenerlistadocatalogoreportes';
+    const list = await getWithResponse(endpoint, token);
+    return list;
+  } catch (e) {
+    throw e.message;
+  }
+}
+
+export async function getRoleList(serviceURL, token) {
+  try {
+    const endpoint = serviceURL + '/obtenerlistadoroles';
+    const list = await getWithResponse(endpoint, token);
+    return list;
+  } catch (e) {
+    throw e.message;
+  }
+}
+
 export async function getCompanyEntity(serviceURL, id, token) {
   try {
     let endpoint = serviceURL + `/obtenerempresa?idempresa=${id}`;
@@ -36,17 +56,13 @@ export async function getCompanyEntity(serviceURL, id, token) {
       serviceURL +
       `/obtenerlistadoreporteporempresa?idempresa=${entity.IdEmpresa}`;
     const entityReportList = await getWithResponse(endpoint, token);
-    console.log('entity', entity);
     const company = {
       ...entity,
       Barrio: null,
       Logotipo: null,
-      FechaVence: entity.FechaVence
-        ? entity.FechaVence
-        : '',
+      FechaVence: entity.FechaVence ? entity.FechaVence : '',
       ReportePorEmpresa: [],
     };
-    console.log('company', company);
     if (entityReportList != null) {
       company.ReportePorEmpresa = entityReportList.map(item => ({
         Id: item.Id,
@@ -59,7 +75,15 @@ export async function getCompanyEntity(serviceURL, id, token) {
   }
 }
 
-export async function saveCompanyEntity(serviceURL, company, token) {
+export async function saveCompanyEntity(
+  serviceURL,
+  company,
+  companyReports,
+  reportsUpdated,
+  companyRoles,
+  rolesUpdated,
+  token,
+) {
   try {
     const entity = JSON.stringify({
       Entidad: {
@@ -70,8 +94,27 @@ export async function saveCompanyEntity(serviceURL, company, token) {
             : null,
       },
     });
-    console.log('entity', entity);
     await post(serviceURL + '/actualizarempresa', token, entity);
+    if (reportsUpdated) {
+      const reports = JSON.stringify({
+        Id: company.IdEmpresa,
+        Datos: companyReports.map(item => ({
+          IdEmpresa: company.IdEmpresa,
+          IdReporte: item.Id,
+        })),
+      });
+      await post(serviceURL + '/actualizarlistadoreportes', token, reports);
+    }
+    if (rolesUpdated) {
+      const roles = JSON.stringify({
+        Id: company.IdEmpresa,
+        Datos: companyRoles.map(item => ({
+          IdEmpresa: company.IdEmpresa,
+          IdRole: item.Id,
+        })),
+      });
+      await post(serviceURL + '/actualizarlistadoroles', token, roles);
+    }
   } catch (e) {
     throw e.message;
   }

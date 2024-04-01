@@ -1,142 +1,136 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { setCompany, saveCompany } from 'store/session/actions';
 
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Button, TextField, DatePicker, CheckBox } from 'components/custom';
 
-const CompanyScreen = ({ route }) => {
-  const { company, setCompany, saveCompany } = route.params;
-  const [localCompany, setLocalCompany] = useState(company);
+const CompanyScreen = ({ company, setCompany, saveCompany }) => {
   return (
-    <View style={styles.content}>
+    <View style={styles.container}>
       <ScrollView>
         <TextField
           label="Nombre de empresa"
-          value={localCompany.NombreEmpresa}
+          value={company.NombreEmpresa ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, NombreEmpresa: value })
+            setCompany({ ...company, NombreEmpresa: value })
           }
         />
         <TextField
           label="Nombre comercial"
-          value={localCompany.NombreComercial}
+          value={company.NombreComercial ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, NombreComercial: value })
+            setCompany({ ...company, NombreComercial: value })
           }
         />
         <TextField
           label="Identificación"
-          value={localCompany.Identificacion}
+          value={company.Identificacion ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, Identificacion: value })
+            setCompany({ ...company, Identificacion: value })
           }
         />
         <TextField
           label="Dirección"
-          value={localCompany.Direccion}
+          value={company.Direccion ?? ''}
           numberOfLines={2}
-          onChangeText={value =>
-            setLocalCompany({ ...localCompany, Direccion: value })
-          }
+          onChangeText={value => setCompany({ ...company, Direccion: value })}
         />
         <TextField
           label="Correo de notificación"
-          value={localCompany.CorreoNotificacion}
+          value={company.CorreoNotificacion ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, CorreoNotificacion: value })
+            setCompany({ ...company, CorreoNotificacion: value })
           }
         />
         <TextField
           label="Teléfono 1"
-          value={localCompany.Telefono1}
-          onChangeText={value =>
-            setLocalCompany({ ...localCompany, Telefono1: value })
-          }
+          value={company.Telefono1 ?? ''}
+          onChangeText={value => setCompany({ ...company, Telefono1: value })}
         />
         <TextField
           label="Teléfono 2"
-          value={localCompany.Telefono2}
-          onChangeText={value =>
-            setLocalCompany({ ...localCompany, Telefono2: value })
-          }
+          value={company.Telefono2 ?? ''}
+          onChangeText={value => setCompany({ ...company, Telefono2: value })}
         />
         <TextField
           label="Cantidad doc. disponible"
-          value={localCompany.CantidadDisponible}
+          value={company.CantidadDisponible ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, CantidadDisponible: value })
+            setCompany({ ...company, CantidadDisponible: value })
           }
         />
         <TextField
           label="Lineas por factura"
-          value={localCompany.LineasPorFactura}
+          value={company.LineasPorFactura ?? ''}
           onChangeText={value =>
-            setLocalCompany({ ...localCompany, LineasPorFactura: value })
+            setCompany({ ...company, LineasPorFactura: value })
           }
         />
         <DatePicker
           label="Fecha vencimiento"
-          value={localCompany.FechaVence ? localCompany.FechaVence : ''}
-          onChange={value =>
-            setLocalCompany({ ...localCompany, FechaVence: value })
-          }
+          value={company.FechaVence ?? ''}
+          onChange={value => setCompany({ ...company, FechaVence: value })}
         />
         <CheckBox
           label="Permite facturar"
-          value={localCompany.PermiteFacturar}
+          value={company.PermiteFacturar ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              PermiteFacturar: !localCompany.PermiteFacturar,
+            setCompany({
+              ...company,
+              PermiteFacturar: !company.PermiteFacturar,
             });
           }}
         />
         <CheckBox
           label="Asigna vendedor por defecto"
-          value={localCompany.AsignaVendedorPorDefecto}
+          value={company.AsignaVendedorPorDefecto ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              AsignaVendedorPorDefecto: !localCompany.AsignaVendedorPorDefecto,
+            setCompany({
+              ...company,
+              AsignaVendedorPorDefecto: !company.AsignaVendedorPorDefecto,
             });
           }}
         />
         <CheckBox
           label="Auto completa producto"
-          value={localCompany.AutoCompletaProducto}
+          value={company.AutoCompletaProducto ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              AutoCompletaProducto: !localCompany.AutoCompletaProducto,
+            setCompany({
+              ...company,
+              AutoCompletaProducto: !company.AutoCompletaProducto,
             });
           }}
         />
         <CheckBox
           label="Contabiliza"
-          value={localCompany.Contabiliza}
+          value={company.Contabiliza ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              Contabiliza: !localCompany.Contabiliza,
+            setCompany({
+              ...company,
+              Contabiliza: !company.Contabiliza,
             });
           }}
         />
         <CheckBox
           label="Ingresa pago del cliente"
-          value={localCompany.IngresaPagoCliente}
+          value={company.IngresaPagoCliente ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              IngresaPagoCliente: !localCompany.IngresaPagoCliente,
+            setCompany({
+              ...company,
+              IngresaPagoCliente: !company.IngresaPagoCliente,
             });
           }}
         />
         <CheckBox
           label="Régimen simplificado"
-          value={localCompany.RegimenSimplificado}
+          value={company.RegimenSimplificado ?? false}
           onValueChange={() => {
-            setLocalCompany({
-              ...localCompany,
-              RegimenSimplificado: !localCompany.RegimenSimplificado,
+            setCompany({
+              ...company,
+              RegimenSimplificado: !company.RegimenSimplificado,
             });
           }}
         />
@@ -145,7 +139,7 @@ const CompanyScreen = ({ route }) => {
           style={styles.button}
           titleUpperCase
           title="Guardar"
-          onPress={() => saveCompany(localCompany)}
+          onPress={() => saveCompany()}
         />
         <Button
           style={styles.button}
@@ -159,7 +153,9 @@ const CompanyScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
+    display: 'flex',
+    paddingTop: 10,
     padding: 20,
   },
   buttonContainer: {
@@ -172,4 +168,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompanyScreen;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ setCompany, saveCompany }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(CompanyScreen);
